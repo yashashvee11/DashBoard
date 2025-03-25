@@ -34,11 +34,7 @@ app.layout = html.Div([
         html.Label("Select Statistics:"),
         dcc.Dropdown(
             id='dropdown-statistics',
-            options=[
-                {'label': 'Yearly Statistics', 'value': 'Yearly Statistics'},
-                {'label': 'Recession Period Statistics', 'value': 'Recession Period Statistics'}
-            ],
-            value='Select Statistics',
+            options=dropdown_options,
             placeholder='Select a report type',
             style={'textAlign': 'center', 'width': '80%', 'padding': '3px', 'font-size': 20}
         )
@@ -46,7 +42,6 @@ app.layout = html.Div([
     html.Div(dcc.Dropdown(
         id='select-year',
         options=[{'label': i, 'value': i} for i in year_list],
-        value='Select-year',
         placeholder='Select-year',
         style={'textAlign': 'center', 'width': '80%', 'padding': '3px', 'font-size': 20}
     )),
@@ -133,19 +128,19 @@ def update_output_container(selected_statistics, input_year):
         title="Yearly Automobile Sales"))
             
         # Plot 2 Total Monthly Automobile sales using line chart.
-        yearly_data = yearly_data.groupby('Month')['Automobile_Sales'].mean().reset_index()
-        Y_chart2 = dcc.Graph(figure=px.line(yearly_data,
+        monthly_sales_data = yearly_data.groupby('Month')['Automobile_Sales'].mean().reset_index()
+        Y_chart2 = dcc.Graph(figure=px.line(monthly_sales_data,
             x='Month',
             y='Automobile_Sales',
             title='Total Monthly Automobile Sales'))
 
         # Plot 3 bar chart for average number of vehicles sold during the given year
-        avr_vdata = data.groupby(['Vehicle_Type'])['Automobile_Sales'].mean().reset_index()
+        avr_vdata = yearly_data.groupby('Vehicle_Type')['Automobile_Sales'].mean().reset_index()
         Y_chart3 = dcc.Graph(figure=px.bar(avr_vdata,
             x='Vehicle_Type',
             y='Automobile_Sales',
             color='Vehicle_Type',
-            title='Average Vehicles Sold by Vehicle Type {}'.format(input_year)))
+            title=f'Average Vehicles Sold by Type in {input_year}'))
         
         print("Columns in yearly_data before grouping by Vehicle_Type:", yearly_data.columns)
 
