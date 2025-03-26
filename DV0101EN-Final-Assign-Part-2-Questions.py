@@ -1,11 +1,14 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[ ]:
+
+
 import dash
-import more_itertools
-from dash import dcc
-from dash import html
-from dash.dependencies import Input, Output
 import pandas as pd
-import plotly.graph_objs as go
 import plotly.express as px
+from dash import dcc, html
+from dash.dependencies import Input, Output
 
 # Load the data using pandas
 data = pd.read_csv('https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DV0101EN-SkillsNetwork/Data%20Files/historical_automobile_sales.csv')
@@ -17,13 +20,14 @@ app = dash.Dash(__name__)
 app.title = "Automobile Statistics Dashboard"
 
 #---------------------------------------------------------------------------------
-# Create the dropdown menu options
+# Dropdown menu options
 dropdown_options = [
     {'label': 'Yearly Statistics', 'value': 'Yearly Statistics'},
-    {'label': 'Recession Period Statistics', 'value': 'Recession Period'}
+    {'label': 'Recession Period Statistics', 'value': 'Recession Period Statistics'}
 ]
+
 # List of years 
-year_list = [i for i in range(1980, 2024, 1)]
+year_list = [{'label': str(i), 'value': i} for i in range(1980, 2024)]
 #---------------------------------------------------------------------------------------
 # Create the layout of the app
 app.layout = html.Div([
